@@ -19,18 +19,19 @@ $:
           script: bun run build
 
   push:
-    # sync_to_github:
-    #   stages:
-    #     - name: sync to github
-    #       image: tencentcom/git-sync
-    #       imports:
-    #         - https://cnb.cool/arsrna/env/-/blob/main/git.yaml
-    #       settings:
-    #         target_url: https://github.com/ArSrNa/os-vite-react-template.git
-    #         auth_type: https
-    #         username: ${GIT_USERNAME}
-    #         password: ${GIT_ACCESS_TOKEN}
-    #         git_email: "root@arsrna.cn"
+    sync_to_github:
+      stages:
+        - name: sync to github
+          image: tencentcom/git-sync
+          imports:
+            - https://cnb.cool/arsrna/env/-/blob/main/git.yaml
+          settings:
+            target_url: https://github.com/ArSrNa/os-vite-react-template.git
+            auth_type: https
+            username: ${GIT_USERNAME}
+            password: ${GIT_ACCESS_TOKEN}
+            git_email: "root@arsrna.cn"
+
     coverage_test:
       docker:
         image: node:24
@@ -41,7 +42,9 @@ $:
         - name: bun
           script: npm i -g bun
         - name: 测试覆盖率
-          script: bun test
+          script:
+            - bun i
+            - bun test
         - name: coverage
           type: testing:coverage
           options:
