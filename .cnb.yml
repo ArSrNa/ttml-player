@@ -26,7 +26,7 @@ $:
           imports:
             - https://cnb.cool/arsrna/env/-/blob/main/git.yaml
           settings:
-            target_url: https://github.com/ArSrNa/os-vite-react-template.git
+            target_url: https://github.com/ArSrNa/ttml-player
             auth_type: https
             username: ${GIT_USERNAME}
             password: ${GIT_ACCESS_TOKEN}
@@ -58,7 +58,7 @@ $:
   # tag push 时触发
   tag_push:
     - docker:
-        image: docker.cnb.cool/arsrna/dev-env/node22:latest
+        image: node:24
         volumes:
           - /root/.bun/install/cache
           - /root/.npm
@@ -67,6 +67,7 @@ $:
       stages:
         - name: 构建部署
           script:
+            - npm i -g bun
             - bun i
             - bun run build
             - echo $CNB_BRANCH

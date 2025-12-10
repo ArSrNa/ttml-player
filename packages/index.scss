@@ -1,0 +1,139 @@
+/* src/components/LyricPlayer.css */
+.apple-music-lyric {
+    width: 100%;
+    height: 80vh;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #fff;
+    background-color: #121212;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.lyric-loading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 16px;
+}
+
+.lyric-meta {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.lyric-artist {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.lyric-songwriters {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+}
+
+.lyric-container {
+    height: calc(100% - 120px);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    padding: 0 20px;
+}
+
+/* 隐藏滚动条（保持Apple风格） */
+.lyric-container::-webkit-scrollbar {
+    display: none;
+}
+
+.lyric-line {
+    padding: 8px 0;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.5;
+    /* 未激活行半透明 */
+    transition: opacity 0.3s ease;
+    min-height: 40px;
+    /* 为背景歌词预留空间 */
+}
+
+.lyric-line--active {
+    opacity: 1;
+    /* 激活行高亮 */
+    font-weight: 500;
+}
+
+.lyric-part-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 10px;
+    color: #888;
+    opacity: 0;
+}
+
+.lyric-line--active .lyric-part-tag {
+    opacity: 1;
+}
+
+.lyric-word {
+    display: flex;
+    z-index: 1;
+    color: transparent;
+    /* 逐字高亮背景 */
+    // transform: translateY(var(--progress));
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 256) 0%, rgba(0, 0, 0, var(--progress)) 100%);
+    // background-clip: text;
+    // transition: all 0.1s;
+
+    &--active {
+        color: #fff;
+    }
+
+    &--sung {
+        color: white;
+    }
+
+    &--background {
+        color: #666;
+        font-size: 0.8em;
+        opacity: 0.7;
+        // display: none;
+    }
+
+    &--background.lyric-word--active {
+        color: #999;
+    }
+}
+
+/* 当行激活时显示背景歌词 */
+.lyric-line--active .lyric-word--background {
+    display: inline-block;
+}
+
+.lyric-words-main {
+    display: flex;
+    text-align: center;
+}
+
+.lyric-words-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+    gap: 2px;
+    /* 背景歌词之间的间距 */
+
+    .lyric-word--background {
+        display: inline-block;
+    }
+}

@@ -1,2 +1,3 @@
-import Component from "./Component";
-export default Component;
+import Player from "./Player";
+
+export default Player;
