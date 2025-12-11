@@ -43,6 +43,7 @@ export const useLyricPlayer = ({ lyric, isPlaying, currentTime }: UseLyricPlayer
             const scrollTop = line.offsetTop - container.clientHeight / 2 + line.clientHeight / 2;
             container.scrollTo({
                 top: scrollTop,
+
                 behavior: 'smooth' // 平滑滚动
             });
         }

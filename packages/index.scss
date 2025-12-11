@@ -2,12 +2,12 @@
 .apple-music-lyric {
     width: 100%;
     height: 80vh;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'PingFang SC';
     color: #fff;
-    background-color: #121212;
+    background-color: #292929;
     border-radius: 16px;
     overflow: hidden;
 }
@@ -86,21 +86,19 @@
 }
 
 .lyric-word {
-    display: flex;
-    z-index: 1;
-    color: transparent;
-    /* 逐字高亮背景 */
-    // transform: translateY(var(--progress));
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 256) 0%, rgba(0, 0, 0, var(--progress)) 100%);
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) var(--progress), rgba(0, 0, 0, 0) calc(var(--progress) + 20%));
+    // mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.85) var(--progress), rgba(0, 0, 0, 1) calc(var(--progress) + 20%));
     // background-clip: text;
-    // transition: all 0.1s;
+    // -webkit-background-clip: text;
+    // color: transparent;
 
-    &--active {
-        color: #fff;
+    &-container {
+        position: relative;
     }
 
+
     &--sung {
-        color: white;
+        color: black;
     }
 
     &--background {

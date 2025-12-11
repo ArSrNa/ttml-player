@@ -18,10 +18,12 @@
   "include": [
     "./packages/**/*",
     "./example/**/*",
-    "__tests__/Component.test.tsx"
+    "__tests__/Component.test.tsx",
+    "./packages/global.d.ts"
   ],
   "exclude": [
     "**/*.scss",
+    "**/*.css",
     "node_modules/**/*",
   ]
 }

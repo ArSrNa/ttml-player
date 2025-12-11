@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "redhat.vscode-xml",
-        "wakatime.vscode-wakatime"
+        "wakatime.vscode-wakatime",
+        "timsexperiments.vscode-tailwindcss"
     ]
 }

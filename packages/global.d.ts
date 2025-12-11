@@ -1,8 +1,14 @@
-/// <reference types="vite/client" />
+declare module '*.css' {
+  const content: string;
+  export default content;
+}
 
-
-// 如果需要支持普通SCSS文件（非module）
 declare module '*.scss' {
-  const content: { [key: string]: string };
+  const content: string;
+  export default content;
+}
+
+declare module '*.sass' {
+  const content: string;
   export default content;
 }

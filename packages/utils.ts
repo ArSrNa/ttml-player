@@ -182,3 +182,7 @@ export const getCurrentLyric = (
 
     return { currentLine, currentWord, progressInLine, progressInWord };
 };
+
+export const randomStr = (l: number) => {
+    return new Array(l).fill(0).map(m => Math.random().toString(36).substring(2, 3)).join('')
+}

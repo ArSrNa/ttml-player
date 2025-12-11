@@ -63,6 +63,10 @@
     "react-dom": ">16"
   },
   "dependencies": {
-    "fast-xml-parser": "^5.3.2"
+    "@gsap/react": "^2.1.2",
+    "@tailwindcss/vite": "^4.1.17",
+    "fast-xml-parser": "^5.3.2",
+    "gsap": "^3.14.1",
+    "tailwindcss": "^4.1.17"
   }
 }

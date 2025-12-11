@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import typescript from '@rollup/plugin-typescript';
 import path from 'path';
-
+import tailwindcss from '@tailwindcss/vite'
 
 function resolve(str: string) {
   return path.resolve(__dirname, str);
@@ -27,7 +27,6 @@ export default defineConfig({
         "ES6",
         "DOM",
       ],
-      rootDir: "./packages",
       declaration: true, // 生成 `.d.ts` 文件
       outDir: "./dist", // 编译后生成的文件目录
       strict: false,
@@ -35,16 +34,24 @@ export default defineConfig({
       noEmit: false, // 确保 noEmit 为 false（默认值）
       emitDeclarationOnly: false, // 确保 emitDeclarationOnly 为 false（默认值）
       allowImportingTsExtensions: false, // 禁用该选项
+      allowJs: true,
+      esModuleInterop: true,
+      skipLibCheck: true,
+      forceConsistentCasingInFileNames: true,
+      moduleResolution: "node",
     },
     include: [
-      resolve("./packages/**/*"),
+      resolve("./packages/**/*.ts"),
+      resolve("./packages/**/*.tsx"),
+      resolve("./packages/**/*.d.ts"),
     ],
     exclude: [
       resolve("./node_modules/**/*"),
       resolve("**/*.scss"),
       resolve("**/*.module.scss"),
+      resolve("**/*.css"),
     ],
-  }),],
+  }), tailwindcss()],
   build: {
     cssCodeSplit: false,
     // 打包输出的目录
