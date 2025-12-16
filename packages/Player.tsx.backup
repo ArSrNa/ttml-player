@@ -43,7 +43,9 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
         currentTime
     });
 
-    const currentIndex = lyric?.allLines.findIndex(l => l.lineId === currentLine?.lineId) ?? -1;
+    if (!lyric) return <div className="lyric-loading">加载歌词中...</div>;
+
+    const currentIndex = lyric.allLines.findIndex(l => l.lineId === currentLine?.lineId);
     const [activeIndex, setActiveIndex] = React.useState(() => Math.max(0, currentIndex));
     React.useEffect(() => {
         if (currentIndex >= 0) {
@@ -51,9 +53,7 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
         }
     }, [currentIndex]);
 
-    if (!lyric) return <div className="lyric-loading">加载歌词中...</div>;
-
-    const items = lyric!.allLines.map((line) => {
+    const items = lyric.allLines.map((line) => {
         const isCurrent = currentLine?.lineId === line.lineId;
         return (
             <div
@@ -86,7 +86,7 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
                 {isCurrent && line.words.some(w => w.isBackground) && (
                     <div className="lyric-words-background">
                         {line.words.filter(w => w.isBackground).map((word) => {
-                            const isCurrentWord = currentWord?.begin <= line.begin;
+                            const isCurrentWord = currentWord?.begin === word.begin;
                             const isBeforeCurrent = currentWord && word.begin < currentWord.begin;
                             const isSung = isBeforeCurrent || (isCurrentWord && progressInWord > 0);
                             const progress = isCurrentWord ? progressInWord * 100 : 0;

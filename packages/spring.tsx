@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ReactNode, useRef, useLayoutEffect } from "react";
+import { ReactNode, useRef, useLayoutEffect, useMemo } from "react";
 import { randomStr } from "./utils";
 
 gsap.registerPlugin(useGSAP);
@@ -12,8 +12,9 @@ export function SpringEffect({
     items: ReactNode[];
     current: number;
 }) {
-    const prefix = randomStr(5);
-    const className = (name: string) => `_${prefix}_${name}`;
+    const prefix = useMemo(() => randomStr(5), []);
+
+    const className = useMemo(() => (name: string) => `_${prefix}_${name}`, [prefix]);
 
     const viewportRef = useRef<HTMLDivElement>(null);
     const innerRef = useRef<HTMLDivElement>(null);
@@ -36,48 +37,36 @@ export function SpringEffect({
 
         gsap.to(inner, {
             y: targetY,
-            duration: 0.2,
+            duration: 0.3,
             // ease: "elastic.out(1, 0.45)",
             ease: 'power2.out',
             overwrite: "auto"
         });
     }, [current]);
 
-    /* ===============================
-     * 当前行 + 未来歌词弹性 + 上方歌词 fade
-     * =============================== */
     useGSAP(() => {
-        lineRefs.current.forEach((el, i) => {
+        const lines = lineRefs.current;
+        lines.forEach((el) => gsap.killTweensOf(el));
+        const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
+        lines.forEach((el, i) => {
             if (!el) return;
-
             const distance = i - current;
-
-            // 上方已唱歌词：只做淡出，固定位置
             if (distance < 0) {
-                gsap.to(el, { opacity: 0.3, scale: 1, duration: 0.3, ease: "elastic.out(1, 0.45)" });
-                gsap.set(el, { y: 0 });
-                return;
+                const compress = Math.min(12, (-distance) * LINE_HEIGHT * 0.15);
+                tl.to(el, { y: -compress, opacity: 0.8, duration: 0.15, ease: "power2.out" }, 0);
+                tl.to(el, { y: 0, opacity: 0.3, duration: 0.35, ease: "back.out(1.2)" }, 0.12);
+            } else {
+                const fromY = distance * LINE_HEIGHT * 0.5;
+                const delay = distance * 0.03;
+                tl.fromTo(
+                    el,
+                    { y: fromY, opacity: distance === 0 ? 1 : 0.7 },
+                    { y: 0, opacity: 1, duration: 0.5, ease: "elastic.out(0.2, 0.4)" },
+                    delay
+                );
             }
-
-            // 当前行或未来歌词：从下方弹上
-            const fromY = distance * LINE_HEIGHT * 0.9; // 初始位移
-            const delay = distance * 0.05; // 弹性延迟
-
-            gsap.fromTo(
-                el,
-                { y: fromY, opacity: distance === 0 ? 1 : 0.6, scale: distance === 0 ? 1 : 1 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.9,
-                    delay,
-                    ease: "elastic.out(0.9, 0.45)",
-                    overwrite: "auto"
-                }
-            );
         });
-    }, [items, current]);
+    }, [current]);
 
     /* ===============================
      * 渲染
@@ -97,7 +86,7 @@ export function SpringEffect({
                         ref={(el) => {
                             if (el) lineRefs.current[i] = el;
                         }}
-                        className={className(`bounce-item${i}`)}
+                        className={className(`bounce-item${i}`) + ' transform-origin-[0%_0%]'}
                         style={{
                             color: i === current ? "black" : "gray",
                         }}

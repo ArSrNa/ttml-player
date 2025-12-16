@@ -101,19 +101,19 @@ export const parseTTMLToAppleMusicLyric = (ttmlStr: string): AppleMusicLyric => 
 
             const spans = Array.isArray(line.span) ? line.span : [line.span];
             spans.forEach(span => {
+                const role = span['ttm:role'] || span['role'] || span['ttmrole'];
+                const isBgWrapper = role === 'x-bg';
                 if (span.span) {
-                    // 处理嵌套的span（背景歌词）
                     const nestedSpans = Array.isArray(span.span) ? span.span : [span.span];
-                    const isBackground = span['ttm:role'] === 'x-bg';
                     nestedSpans.forEach(nestedSpan => {
-                        const word = parseSpanToWord(nestedSpan, isBackground);
+                        const word = parseSpanToWord(nestedSpan, isBgWrapper);
                         if (word) {
                             words.push(word);
                             allWords.push(word);
                         }
                     });
                 } else {
-                    const word = parseSpanToWord(span, false);
+                    const word = parseSpanToWord(span, isBgWrapper);
                     if (word) {
                         words.push(word);
                         allWords.push(word);
