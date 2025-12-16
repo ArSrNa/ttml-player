@@ -1,6 +1,6 @@
 // src/components/LyricPlayer.tsx
 import React, { CSSProperties, PropsWithChildren } from 'react';
-import { AppleMusicLyric, parseTTMLToAppleMusicLyric } from './utils';
+import { AppleMusicLyric, LyricWord, parseTTMLToAppleMusicLyric } from './utils';
 import { useLyricPlayer } from './useLyricPlayer';
 import './index.scss';
 
@@ -50,28 +50,21 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
             className="flex flex-col gap-3 h-100 overflow-y-scroll bg-gray-300"
             ref={lyricContainerRef}
         >
-            {/* 遍历所有行渲染 */}
-            {lyric.allLines.map((line) => {
-                const isCurrentLine = line.lineId === currentLine?.lineId;
-                return (
-                    <div
-                        key={line.lineId}
-                        // className={`lyric-line ${isCurrent ? 'lyric-line--active' : ''}`}
-                        className='flex flex-col'
-                        ref={isCurrentLine ? currentLineRef : null}
-                    // onClick={() => jumpToLine(line, onTimeChange)} // 点击行跳转播放
-                    >
-                        {/* 逐字渲染（核心：Apple Music 逐字高亮） */}
-                        <div className="flex">
-                            {line.words.filter(word => !word.isBackground).map((word, idx) => {
-                                const isCurrentWord = currentWord?.begin === word.begin;
-                                const isBeforeCurrent = currentWord && word.begin < currentWord.begin;
-                                const isSung = isBeforeCurrent;
-                                const text = word.text;
+            <div
+                className='flex flex-col'
+            // onClick={() => jumpToLine(line, onTimeChange)} // 点击行跳转播放
+            >
+                {/* 逐字渲染（核心：Apple Music 逐字高亮） */}
+                <div className="flex">
+                    {currentLine?.words.filter(word => !word.isBackground).map((word, idx) => {
+                        const isCurrentWord = currentWord?.begin === word.begin;
+                        const isBeforeCurrent = currentWord && word.begin < currentWord.begin;
+                        const isSung = isBeforeCurrent;
+                        const text = word.text;
 
-                                return (
-                                    <>
-                                        {/* <span
+                        return (
+                            <>
+                                {/* <span
                                             key={`${line.lineId}-main-${idx}`}
                                             className={`
                                                 lyric-word
@@ -86,18 +79,20 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
                                         >
                                             {text}
                                         </span> */}
-                                        <Word
-                                            isSung={isSung}
-                                            isCurrentLine={isCurrentLine}
-                                            key={`${line.lineId}-main-${idx}`}
-                                            progress={progressInWord * 100}
-                                            isCurrentWord={isCurrentWord}
-                                        >{text}</Word>
-                                    </>
-                                );
-                            })}
-                            {/* 背景歌词 - 只在当前行有背景歌词且该行激活时显示 */}
-                            {/* {isCurrent && line.words.some(word => word.isBackground) && (
+                                <Word
+                                    currentTime={currentTime}
+                                    word={word}
+                                    isSung={isSung}
+                                    // isCurrentLine={isCurrentLine}
+                                    // key={`${line.lineId}-main-${idx}`}
+                                    progress={progressInWord * 100}
+                                    isCurrentWord={isCurrentWord}
+                                >{text}</Word>
+                            </>
+                        );
+                    })}
+                    {/* 背景歌词 - 只在当前行有背景歌词且该行激活时显示 */}
+                    {/* {isCurrent && line.words.some(word => word.isBackground) && (
                                 <div className="lyric-words-background">
                                     {line.words.filter(word => word.isBackground).map((word, idx) => {
                                         const isCurrentWord = currentWord?.begin === word.begin;
@@ -121,35 +116,34 @@ const LyricPlayer: React.FC<LyricPlayerProps> = ({
                                     })}
                                 </div>
                             )} */}
-                        </div>
-                        {/* 段落标签（可选，如 Verse/Chorus） */}
-                    </div>
-                );
-            })}
+                </div>
+                {/* 段落标签（可选，如 Verse/Chorus） */}
+            </div>
         </div>
 
     );
 };
 
 
-function Word({ children, progress, isCurrentWord, isCurrentLine, isSung }: PropsWithChildren<{
+function Word({ children, progress, isCurrentWord, isSung, word, currentTime }: PropsWithChildren<{
     progress: number;
     isCurrentWord: boolean;
-    isCurrentLine: boolean;
     className?: string;
     isSung: boolean;
+    word: LyricWord;
+    currentTime: number;
 }>) {
     return <span className='relative inline-block'>
-        <div className='absolute left-0 top-0 z-1 lyric-word'
+        <div className='absolute left-0 top-0 z-1 text-red-700 lyric-word'
             style={{
-                color: isCurrentLine ? 'red' : 'gray',
+                // color: isCurrentLine ? 'red' : 'gray',
                 '--progress': !isSung ? isCurrentWord ? `${progress}%` : '0%' : '100%'
 
             } as CSSProperties}
         >{children}</div>
         <span className='relative left-0 top-0 z-0'
             style={{
-                color: isCurrentLine ? 'white' : 'gray',
+                // color: isCurrentLine ? 'white' : 'gray',
             }}
         >{children}</span>
     </span>

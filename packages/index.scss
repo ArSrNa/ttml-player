@@ -86,7 +86,7 @@
 }
 
 .lyric-word {
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) var(--progress), rgba(0, 0, 0, 0) calc(var(--progress) + 20%));
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 255) calc(var(--progress) - 20%), rgba(0, 0, 0, 0) calc(var(--progress)));
     // mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.85) var(--progress), rgba(0, 0, 0, 1) calc(var(--progress) + 20%));
     // background-clip: text;
     // -webkit-background-clip: text;
@@ -133,5 +133,16 @@
 
     .lyric-word--background {
         display: inline-block;
+    }
+}
+
+
+@keyframes text-mask {
+    from {
+        mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 0%);
+    }
+
+    to {
+        mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 1) 100%);
     }
 }
